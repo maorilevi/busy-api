@@ -1,5 +1,4 @@
 import { Body, Controller, Get, HttpException, HttpStatus, Inject, Post } from '@nestjs/common';
-import { BlAuthenticationService } from '../bl/bl.authentication.service';
 import { Authentication } from '../core/authentication';
 import { AuthUserDTO } from '../models/auth.user.dto';
 import { LoginDTO } from '../models/login.dto';
@@ -7,7 +6,6 @@ import { UserDTO } from '../../shared/models/users/user.dto.model';
 import { ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
 import { SignupDto } from '../models/signup.dto';
 import { AUTHENTICATION_BL_SERVICE_PROVIDE_NAME } from '../bl/bl-factory';
-import { UserDAO } from '../../shared/models/users/user.dao.model';
 
 @ApiTags('Authentication')
 @Controller('authentication')

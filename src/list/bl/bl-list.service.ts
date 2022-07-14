@@ -3,7 +3,7 @@ import { ListService } from '../core/list.service';
 import { ListDTO } from '../models/list.dto';
 import { LIST_DL_SERVICE_PROVIDE_NAME } from '../dl/dl-list.factory';
 import { ListDAO } from '../models/list.dao';
-import { DL_ERRORS, ERROR_MESSAGES_MAPPER } from '../../shared/db/errors';
+import { DL_ERRORS, DL_ERROR_MESSAGES_MAPPER } from '../../shared/db/errors';
 import { LIST_MAPPER_SERVICE_PROVIDE_NAME } from '../utils/list.mapper.factory';
 import { Mapper } from '../../authentication/core/mapper';
 
@@ -21,7 +21,7 @@ export class BLListService implements ListService<ListDTO> {
         list.createdDate = new Date();
         const myLists = await this.dlListService.getMyLists(list.createdById);
         if (myLists.filter((mlist: ListDAO) => mlist.name === list.name).length > 0) {
-            throw Error(JSON.stringify(ERROR_MESSAGES_MAPPER[DL_ERRORS.ALREADY_EXIST]))
+            throw Error(JSON.stringify(DL_ERROR_MESSAGES_MAPPER[DL_ERRORS.ALREADY_EXIST]))
         } else {
             const newDAOList = this.listMapperService.toDAO(list);
             const updatedNewDAOList = await this.dlListService.create(newDAOList);

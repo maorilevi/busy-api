@@ -4,6 +4,7 @@ import { DatabaseConfigService } from '../../shared/db/database.config.service';
 import { InputItemsModel } from '../models/input-items.model';
 import { ItemDAO } from '../models/item.dao';
 import { CategoryDAO } from '../models/category.dao';
+import { DL_ERROR_MESSAGES_MAPPER, DL_ERRORS } from '../../shared/db/errors';
 
 @Injectable()
 export class DLItemsService implements ItemsService<ItemDAO,CategoryDAO> {
@@ -26,40 +27,40 @@ export class DLItemsService implements ItemsService<ItemDAO,CategoryDAO> {
         return Promise.resolve([]);
     }
 
-    getAllItems(): Promise<ItemDAO[]> {
-        return new Promise((resolve, reject) => {
-            this.databaseConfigService.connection.query(`CALL GET_ALL_ITEMS`, (error, res) => {
-                if(error) {
-                    reject(error);
-                } else {
-                    // console.log(res);
-                    const newItemsList = res[0].map((item) => new ItemDAO(item.category_id, item.id, item.uuid, item.name));
-                    resolve(newItemsList);
-                }
-            })
-        });
+    async getAllItems(): Promise<ItemDAO[]> {
+        const query = `CALL GET_ALL_ITEMS()`;
+        try {
+            const response = await this.databaseConfigService.query(query);
+            if (response.length > 0) {
+                const items: ItemDAO[] = response.map((item) => new ItemDAO(item.category_id, item.id, item.uuid, item.name));
+                return items;
+            } else {
+              throw Error(DL_ERROR_MESSAGES_MAPPER[DL_ERRORS.NO_RESULTS]);
+            }
+        } catch (e) {
+            console.log(query);
+            throw Error(e)
+        }
     }
 
-    getItemById(id: string): Promise<ItemDAO> {
+    async getItemById(id: string): Promise<ItemDAO> {
         return Promise.resolve(undefined);
     }
 
-    getItemsByCategoryId(id: string): Promise<ItemDAO[]> {
+    async getItemsByCategoryId(id: string): Promise<ItemDAO[]> {
         return Promise.resolve([]);
     }
 
     async getItemsByName(name: string): Promise<ItemDAO[]> {
-        return new Promise<ItemDAO[]>((resolve, reject) => {
-            this.databaseConfigService.connection.query(`CALL get_all_items_by_name('${name}')`, (err, res) => {
-               if (err) {
-                   return reject(err);
-               } else {
-                   const newItemsList = res[0].map((item) => new ItemDAO(item.category_id, item.id, item.uuid, item.name));
-                   return resolve(newItemsList);
-               }
-            });
-        })
-        return
+        const query = `CALL get_all_items_by_name('${name}')`;
+        try {
+            const response = await this.databaseConfigService.query(query);
+            const items: ItemDAO[] = response.map((item) => new ItemDAO(item.category_id, item.id, item.uuid, item.name));
+            return items;
+        } catch (e) {
+            console.log(query);
+            throw Error(e);
+        }
     }
     private removeByWord(word: string, str: string): string {
         if (str.split(' ').filter((st: string) => st === word).length > 0) {

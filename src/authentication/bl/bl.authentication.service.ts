@@ -8,7 +8,7 @@ import { UserDTO } from '../../shared/models/users/user.dto.model';
 import { TokenService } from '../../shared/token/token.service';
 import { JwtPayload } from 'jsonwebtoken';
 import { CryptorService } from '../../shared/crypto/cryptor.service';
-import { ERROR_MESSAGES_MAPPER } from '../../shared/db/errors';
+import { DL_ERROR_MESSAGES_MAPPER } from '../../shared/db/errors';
 import { SignupDto } from '../models/signup.dto';
 import { USERS_MAPPER_SERVICE_PROVIDE_NAME } from '../../shared/mapper/user-mapper-factory';
 import { WEB_TOKEN_PROVIDE_NAME } from '../../shared/token/web-token-factory';
@@ -64,7 +64,7 @@ export class BlAuthenticationService implements Authentication<UserDTO, AuthUser
         } catch (e) {
             switch (e) {
                 default:
-                    throw Error(JSON.stringify(ERROR_MESSAGES_MAPPER[e]));
+                    throw Error(JSON.stringify(DL_ERROR_MESSAGES_MAPPER[e]));
             }
         }
     }
