@@ -30,14 +30,19 @@ export class BlAuthenticationService implements Authentication<UserDTO, AuthUser
     private readonly cryptorService: CryptorService;
 
     async login(loginModel: LoginDTO): Promise<AuthUserDTO> {
-        const userDAO: UserDAO = await this.dlAuthService.login(loginModel);
-        const userDTO: UserDTO = this.mapper.toDTO(userDAO);
-        const token: string = await this.tokenService.generateToken(userDTO) as string;
-        const authenticatedUser: AuthUserDTO = {
-            user: userDTO,
-            token
+        try {
+            const userDAO: UserDAO = await this.dlAuthService.login(loginModel);
+            const userDTO: UserDTO = this.mapper.toDTO(userDAO);
+            const token: string = await this.tokenService.generateToken(userDTO) as string;
+            const authenticatedUser: AuthUserDTO = {
+                user: userDTO,
+                token
+            }
+            return authenticatedUser;
+        } catch (e) {
+            return Promise.reject(e);
         }
-        return authenticatedUser;
+
     }
 
     async logout(token: string): Promise<void> {

@@ -2,21 +2,24 @@ import { Inject, Injectable } from '@nestjs/common';
 import { Authentication } from '../core/authentication';
 import { UserDAO } from '../../shared/models/users/user.dao.model';
 import { LoginDTO } from '../models/login.dto';
-import { connection } from '../../shared/db/utils';
 import { snakeToCamel } from '../../shared/general';
 import { DL_ERRORS } from '../../shared/db/errors';
 import { CryptorService } from '../../shared/crypto/cryptor.service';
 import { CRYPTO_SERVICE_FACTORY_NAME } from '../../shared/crypto/crypto-factory';
+import { DatabaseConfigService } from '../../shared/db/database.config.service';
 
 @Injectable()
 export class DlAuthenticationService implements Authentication<UserDAO, UserDAO> {
     @Inject(CRYPTO_SERVICE_FACTORY_NAME)
     private readonly cryptorService: CryptorService;
 
+    @Inject(DatabaseConfigService)
+    private readonly databaseConfigService: DatabaseConfigService;
+
     async login(loginModel: LoginDTO): Promise<UserDAO> {
         const query = `CALL get_user('${loginModel.email}')`;
         return new Promise((resolve, reject) => {
-            connection.query(query, async (error, res) => {
+            this.databaseConfigService.connection.query(query, async (error, res) => {
                 if (error) {
                     reject(error);
                 } else {
@@ -44,7 +47,7 @@ export class DlAuthenticationService implements Authentication<UserDAO, UserDAO>
         const {firstName, lastName, email, avatar, password} = userDAO;
 
         return new Promise((resolve, reject) => {
-            connection.query(`CALL user_insert('${firstName}' ,'${lastName}' ,'${email}' ,'${avatar}' ,'${password}')`, (error, res ) => {
+            this.databaseConfigService.connection.query(`CALL user_insert('${firstName}' ,'${lastName}' ,'${email}' ,'${avatar}' ,'${password}')`, (error, res ) => {
                 if (error) {
                     switch (error.code) {
                         case 'ER_DUP_ENTRY':

@@ -34,5 +34,5 @@ lerna-debug.log*
 !.vscode/launch.json
 !.vscode/extensions.json
 
-.env
-.env.local
+src/enviroments/.env
+src/enviroments/.env.local

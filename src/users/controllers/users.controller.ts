@@ -5,10 +5,11 @@ import { UsersFilter } from '../core/users.filter';
 import { BL_USERS_SERVICE_FACTORY_PROVIDE_NAME } from '../bl/bl.factory';
 import { ApiBearerAuth, ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from '../../shared/guard/auth.guard';
-@ApiTags('users')
+
 @ApiBearerAuth()
-@Controller('users')
 @UseGuards(AuthGuard)
+@ApiTags('Users')
+@Controller('users')
 export class UsersController implements UsersCore {
     @Inject(BL_USERS_SERVICE_FACTORY_PROVIDE_NAME)
     private readonly blUsersService: UsersCore;
