@@ -10,6 +10,6 @@ export class UsersMapperService implements Mapper<UserDAO, UserDTO>{
     }
 
     public toDTO(dao: UserDAO): UserDTO {
-        return new UserDTO(dao.id, dao.avatar, dao.email, dao.firstName, dao.lastName);
+        return new UserDTO(dao.id, dao.avatar, dao.email, dao.first_name, dao.last_name);
     }
 }

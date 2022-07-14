@@ -5,17 +5,17 @@ import {
   USERS_MAPPER_SERVICE_MOCK_FACTORY,
   USERS_MAPPER_SERVICE_PROVIDE_NAME
 } from '../../shared/mapper/user-mapper-factory';
-import { WEB_TOKEN_PROVIDE_NAME, WEB_TOKEN_MOCK_FACTORY } from '../../shared/token/web-token-factory';
-import { CRYPTO_SERVICE_MOCK_FACTORY } from '../../shared/crypto/crypto-factory';
+import { WEB_TOKEN_PROVIDE_NAME, WEB_TOKEN_MOCK_FACTORY } from '../../token/core/web-token-factory';
+import { CRYPTO_SERVICE_MOCK_FACTORY } from '../../crypto/factors/crypto-factory';
 import { Authentication } from '../core/authentication';
 import { UserDAO } from '../../shared/models/users/user.dao.model';
 import { JohnS1LoginUserMockDAO, JohnS1LoginUserMockDTO } from './__mock__/login.user.mock';
 import { LoginDTO } from '../models/login.dto';
 import { Mapper } from '../core/mapper';
 import { UserDTO } from '../../shared/models/users/user.dto.model';
-import { TokenService } from '../../shared/token/token.service';
+import { TokenService } from '../../token/core/token.service';
 import { JwtPayload } from 'jsonwebtoken';
-import { WebTokenService } from '../../shared/token/web-token/web-token.service';
+import { WebTokenService } from '../../token/web-token/web-token.service';
 import { AuthUserDTO } from '../models/auth.user.dto';
 describe('AuthenticationService', () => {
   let service: BlAuthenticationService;

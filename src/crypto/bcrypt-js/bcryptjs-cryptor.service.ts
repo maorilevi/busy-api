@@ -1,4 +1,4 @@
-import { CryptorService } from './cryptor.service';
+import { CryptorService } from '../core/cryptor.service';
 import * as BcryptJS from 'bcryptjs';
 export class BcryptjsCryptorService implements CryptorService {
     private hashLevel = 8;

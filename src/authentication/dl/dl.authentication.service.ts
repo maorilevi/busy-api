@@ -3,9 +3,9 @@ import { Authentication } from '../core/authentication';
 import { UserDAO } from '../../shared/models/users/user.dao.model';
 import { LoginDTO } from '../models/login.dto';
 import { snakeToCamel } from '../../shared/general';
-import { DL_ERRORS } from '../../shared/db/errors';
-import { CryptorService } from '../../shared/crypto/cryptor.service';
-import { CRYPTO_SERVICE_FACTORY_NAME } from '../../shared/crypto/crypto-factory';
+import { DL_ERROR_MESSAGES_MAPPER, DL_ERRORS } from '../../shared/db/errors';
+import { CryptorService } from '../../crypto/core/cryptor.service';
+import { CRYPTO_SERVICE_FACTORY_NAME } from '../../crypto/factors/crypto-factory';
 import { DatabaseConfigService } from '../../shared/db/database.config.service';
 
 @Injectable()
@@ -18,57 +18,41 @@ export class DlAuthenticationService implements Authentication<UserDAO, UserDAO>
 
     async login(loginModel: LoginDTO): Promise<UserDAO> {
         const query = `CALL get_user('${loginModel.email}')`;
-        return new Promise((resolve, reject) => {
-            this.databaseConfigService.connection.query(query, async (error, res) => {
-                if (error) {
-                    reject(error);
+        try {
+            const response = await this.databaseConfigService.query(query);
+            if (response[0]) {
+                const { id, avatar, email, first_name, last_name, password } = response[0];
+                if (await this.cryptorService.compare(loginModel.password ,password)) {
+                    const userDAO: UserDAO = new UserDAO(id, avatar, email, first_name, last_name);
+                    return userDAO;
                 } else {
-                    let newOnj: UserDAO = { avatar: '', email: '', firstName: '', id: '', lastName: '', password: '' };
-                    const currentResult = {...res[0][0]};
-                    const keys = Object.keys({...currentResult});
-                    keys.forEach((key: string) => {
-                        newOnj[snakeToCamel(key)] = currentResult[key];
-                    })
-                    if (await this.cryptorService.compare(loginModel.password ,newOnj.password)) {
-                        delete newOnj.password;
-                        resolve({...newOnj});
-                    } else {
-                        reject(Error)
-                    }
+                    throw Error(DL_ERROR_MESSAGES_MAPPER[DL_ERRORS.MATCH_ERROR]);
                 }
-            })
-        })
+            } else {
+                throw Error(DL_ERROR_MESSAGES_MAPPER[DL_ERRORS.NOT_EXIST]);
+            }
+        } catch (e) {
+            console.log(query);
+            throw Error(e);
+        }
     }
 
     async logout(token: string): Promise<void> {
     }
 
     async signup(userDAO:UserDAO): Promise<UserDAO> {
-        const {firstName, lastName, email, avatar, password} = userDAO;
+        const {first_name, last_name, email, avatar, password} = userDAO;
+        const query = `CALL user_insert('${first_name}' ,'${last_name}' ,'${email}' ,'${avatar}' ,'${password}')`;
+        try {
+            const response = await this.databaseConfigService.query(query);
+            const { id, avatar, email, first_name, last_name, password } = response[0];
+            const userDAO: UserDAO = new UserDAO(id, avatar, email, first_name, last_name);
+            return userDAO;
 
-        return new Promise((resolve, reject) => {
-            this.databaseConfigService.connection.query(`CALL user_insert('${firstName}' ,'${lastName}' ,'${email}' ,'${avatar}' ,'${password}')`, (error, res ) => {
-                if (error) {
-                    switch (error.code) {
-                        case 'ER_DUP_ENTRY':
-                            reject(DL_ERRORS.ALREADY_EXIST); break;
-                        default:
-                            reject(DL_ERRORS.FATAL_ERROR); break;
-
-                    }
-                    reject(error);
-                } else {
-                    let newOnj: UserDAO = { avatar: '', email: '', firstName: '', id: '', lastName: '', password: '' };
-                    const currentResult = {...res[0][0]};
-                    const keys = Object.keys({...currentResult});
-                    keys.forEach((key: string) => {
-                        newOnj[snakeToCamel(key)] = currentResult[key];
-                    })
-                    resolve(newOnj);
-                }
-            })
-        })
-        // return ;
+        } catch (e) {
+            console.log(query);
+            throw Error(e);
+        }
     }
 
 }

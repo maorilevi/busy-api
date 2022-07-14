@@ -5,6 +5,8 @@ import { UsersModule } from './users/users.module';
 import { SharedModule } from './shared/shared.module';
 import { ItemsModule } from './items/items.module';
 import { ListModule } from './list/list.module';
+import { CryptoModule } from './crypto/crypto.module';
+import { TokenModule } from './token/token.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -15,6 +17,8 @@ import { ListModule } from './list/list.module';
     UsersModule,
     SharedModule,
     ItemsModule,
-    ListModule]
+    ListModule,
+    CryptoModule,
+    TokenModule]
 })
 export class AppModule {}

@@ -1,7 +1,7 @@
 import { CanActivate, ExecutionContext, HttpException, Inject, Injectable } from '@nestjs/common';
 import { Observable } from 'rxjs';
-import { WEB_TOKEN_PROVIDE_NAME } from '../token/web-token-factory';
-import { TokenService } from '../token/token.service';
+import { WEB_TOKEN_PROVIDE_NAME } from '../../token/core/web-token-factory';
+import { TokenService } from '../../token/core/token.service';
 import { UserDTO } from '../models/users/user.dto.model';
 import { JwtPayload } from 'jsonwebtoken';
 

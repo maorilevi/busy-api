@@ -5,15 +5,15 @@ import { AuthUserDTO } from '../models/auth.user.dto';
 import { UserDAO } from '../../shared/models/users/user.dao.model';
 import { Mapper } from '../core/mapper';
 import { UserDTO } from '../../shared/models/users/user.dto.model';
-import { TokenService } from '../../shared/token/token.service';
+import { TokenService } from '../../token/core/token.service';
 import { JwtPayload } from 'jsonwebtoken';
-import { CryptorService } from '../../shared/crypto/cryptor.service';
+import { CryptorService } from '../../crypto/core/cryptor.service';
 import { DL_ERROR_MESSAGES_MAPPER } from '../../shared/db/errors';
 import { SignupDto } from '../models/signup.dto';
 import { USERS_MAPPER_SERVICE_PROVIDE_NAME } from '../../shared/mapper/user-mapper-factory';
-import { WEB_TOKEN_PROVIDE_NAME } from '../../shared/token/web-token-factory';
+import { WEB_TOKEN_PROVIDE_NAME } from '../../token/core/web-token-factory';
 import { AUTHENTICATION_DL_SERVICE_PROVIDE_NAME } from '../dl/dl-factory';
-import { CRYPTO_SERVICE_FACTORY_NAME } from '../../shared/crypto/crypto-factory';
+import { CRYPTO_SERVICE_FACTORY_NAME } from '../../crypto/factors/crypto-factory';
 
 @Injectable()
 export class BlAuthenticationService implements Authentication<UserDTO, AuthUserDTO> {

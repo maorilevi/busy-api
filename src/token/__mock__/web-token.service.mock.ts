@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { TokenService } from '../token.service';
-import { UserDTO } from '../../models/users/user.dto.model';
+import { TokenService } from '../core/token.service';
+import { UserDTO } from '../../shared/models/users/user.dto.model';
 import { JwtPayload } from 'jsonwebtoken';
 
 @Injectable()

@@ -2,23 +2,23 @@ import { Inject, Injectable } from '@nestjs/common';
 import { UsersCore } from '../core/users.core';
 import { UsersFilter } from '../core/users.filter';
 import { UserDTO } from '../../shared/models/users/user.dto.model';
-import { USERS_MAPPER_SERVICE_PROVIDE_NAME } from '../../shared/mapper/user-mapper-factory';
 import { Mapper } from '../../authentication/core/mapper';
 import { UserDAO } from '../../shared/models/users/user.dao.model';
+import { USERS_MAPPER_SERVICE_PROVIDE_NAME } from '../../shared/mapper/user-mapper-factory';
 import { DL_USERS_SERVICE_FACTORY_PROVIDE_NAME } from '../dl/dl.factory';
 
 @Injectable()
-export class BLUsersService implements UsersCore {
+export class BLUsersService implements UsersCore<UserDTO> {
 
     @Inject(USERS_MAPPER_SERVICE_PROVIDE_NAME)
     private readonly mapper: Mapper<UserDAO, UserDTO>;
 
     @Inject(DL_USERS_SERVICE_FACTORY_PROVIDE_NAME)
-    private readonly dlUsersService: UsersCore;
+    private readonly dlUsersService: UsersCore<UserDAO>;
 
     async getAllUsers(): Promise<UserDTO[]> {
         const usersDAO = await this.dlUsersService.getAllUsers();
-        const usersDTO = usersDAO.map((usersDAO: UserDAO) => this.mapper.toDTO(usersDAO));
+        const usersDTO:UserDTO[] = usersDAO.map((usersDAO: UserDAO) => this.mapper.toDTO(usersDAO));
         return usersDTO;
     }
 

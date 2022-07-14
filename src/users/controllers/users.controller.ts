@@ -10,9 +10,9 @@ import { AuthGuard } from '../../shared/guard/auth.guard';
 @UseGuards(AuthGuard)
 @ApiTags('Users')
 @Controller('users')
-export class UsersController implements UsersCore {
+export class UsersController implements UsersCore<UserDTO> {
     @Inject(BL_USERS_SERVICE_FACTORY_PROVIDE_NAME)
-    private readonly blUsersService: UsersCore;
+    private readonly blUsersService: UsersCore<UserDTO>;
 
     @Get()
     @ApiCreatedResponse({

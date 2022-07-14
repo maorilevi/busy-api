@@ -1,12 +1,12 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { TokenService } from '../token.service';
-import { UserDTO } from '../../models/users/user.dto.model';
+import { TokenService } from '../core/token.service';
+import { UserDTO } from '../../shared/models/users/user.dto.model';
 import * as fs from 'fs';
 import { JwtPayload, sign, SignOptions, verify, VerifyOptions } from 'jsonwebtoken';
-import { UserDAO } from '../../models/users/user.dao.model';
-import { Messages } from '../../../authentication/utils/Messages';
-import { Mapper } from '../../../authentication/core/mapper';
-import { USERS_MAPPER_SERVICE_PROVIDE_NAME } from '../../mapper/user-mapper-factory';
+import { UserDAO } from '../../shared/models/users/user.dao.model';
+import { Messages } from '../../authentication/utils/Messages';
+import { Mapper } from '../../authentication/core/mapper';
+import { USERS_MAPPER_SERVICE_PROVIDE_NAME } from '../../shared/mapper/user-mapper-factory';
 
 @Injectable()
 export class WebTokenService implements TokenService<UserDTO, JwtPayload | string>{

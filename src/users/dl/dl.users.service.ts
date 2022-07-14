@@ -6,7 +6,7 @@ import { snakeToCamel } from '../../shared/general';
 import { DatabaseConfigService } from '../../shared/db/database.config.service';
 
 @Injectable()
-export class DLUsersService implements UsersCore {
+export class DLUsersService implements UsersCore<UserDAO> {
 
     @Inject(DatabaseConfigService)
     private readonly databaseConfigService: DatabaseConfigService;
@@ -18,7 +18,7 @@ export class DLUsersService implements UsersCore {
                     reject(error);
                 } else {
                     const updatedUsers = res[0].map((user) => {
-                        let newOnj: UserDAO = { avatar: '', email: '', firstName: '', id: '', lastName: '' };
+                        let newOnj: UserDAO = { avatar: '', email: '', first_name: '', id: '', last_name: '' };
                         delete user.password;
                         const keys = Object.keys({...user});
                         keys.forEach((key: string) => {
@@ -39,7 +39,7 @@ export class DLUsersService implements UsersCore {
                     reject(error);
                 } else {
                     const updatedUsers = res[0].map((user) => {
-                        let newOnj: UserDAO = { avatar: '', email: '', firstName: '', id: '', lastName: '' };
+                        let newOnj: UserDAO = { avatar: '', email: '', first_name: '', id: '', last_name: '' };
                         delete user.password;
                         const keys = Object.keys({...user});
                         keys.forEach((key: string) => {

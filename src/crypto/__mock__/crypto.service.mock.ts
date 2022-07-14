@@ -1,4 +1,4 @@
-import { CryptorService } from '../cryptor.service';
+import { CryptorService } from '../core/cryptor.service';
 import { Injectable } from '@nestjs/common';
 
 @Injectable()

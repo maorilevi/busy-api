@@ -2,7 +2,7 @@ import { User } from './user.model';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 
-export class UserDTO implements User {
+export class UserDTO {
     @ApiPropertyOptional()
     id?: string;
     @ApiPropertyOptional()
